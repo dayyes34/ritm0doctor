@@ -41,6 +41,7 @@ function initRowToggles(container) {
 }
 
 // Мгновенное применение изменений
+// Исправленная версия функции applyChanges:
 function applyChanges() {
     const selectedBlocksCount = +document.getElementById('block-count').value;
     sequencerConfig.blocksCount = selectedBlocksCount;
@@ -56,5 +57,9 @@ function applyChanges() {
     }
     sequencerConfig.cellsPerRow.length = sequencerConfig.blocksCount;
 
+    // ВОТ ЭТИХ ВАЖНЫХ СТРОК НЕ ХВАТАЛО ↓↓↓
+    initSequencerData(sequencerConfig); 
     generateSequencer(sequencerConfig);
+    renderSequencerCells();
 }
+

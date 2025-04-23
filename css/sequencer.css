@@ -1,98 +1,125 @@
 body {
     font-family: Arial, sans-serif;
-    padding: 20px;
+    padding: 0;
 }
 
 #sequencer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* центровка всегда */
+    justify-content: center;
     gap: 10px;
     margin: 0 auto;
-    max-width: calc(4 * 162px + 3 * 10px); /* макс. ширина для 4 блоков + 3 gap */
+    max-width: calc(4 * 192px + 3 * 10px);
 }
-.sequencer-wrapper {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .mute-buttons-column {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .row-mute-button {
-    cursor: pointer;
-    padding: 6px 10px;
-    background-color: #eee;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    font-weight: bold;
-    user-select: none;
-    width: 40px;
-    text-align: center;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  .row-mute-button.muted {
-    background-color: #d9534f;
-    color: #fff;
-    border-color: #b52b27;
-  }
-/* Блоки (рядки) */
-.blocks-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  /* Визуальное затемнение mute рядов */
-.cells-row.muted {
-    opacity: 0.4;
-    pointer-events: none;
-    user-select: none;
-  }    
-/* Стили блока по умолчанию (4 блока на широком экране) */
+
+
+
 .block {
     border: 1px solid #333;
-    padding: 10px;
+    padding: 5px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
     box-sizing: border-box;
-    width: calc(25% - 7.5px); /* 4 блока в ряд, gap в сумме 30px (3 промежутка по 10px) делим на 4 блока = 7.5px */
-    max-width: 162px; /* ваш исходный максимальный размер блока */
+    width: calc(25% - 7.5px);
+    max-width: 192px;
 }
 
 .cells-row {
-    display: grid;
-    gap: 5px;
-    grid-template-columns: repeat(var(--cells-count), 1fr);
-    justify-content: center;
+    position: relative; /* добавим позиционирование относительно этого контейнера */
+    display: flex;
+    justify-content: center; /* теперь содержимое всегда центрировано */
     align-items: center;
-    height: 35px;
+    height: 38px;
+    padding-left: 30px; /* резервируем место слева для кнопки */
+    box-sizing: border-box;
 }
 
-/* Просто ограничим максимальную ширину ВСЕХ ячеек, чтобы при их малом количестве они не растягивались */
+/* кнопка mute теперь жестко стоит слева */
+.mute-button {
+    position: absolute;
+    left: 0; /* кнопка не уедет в центр */
+    top: 50%;
+    transform: translateY(-50%); /* идеально центрируем ее по вертикали */
+    width: 24px; 
+    height: 24px;
+    background: #eee;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.mute-button.active {
+    background: #888;
+    color: #fff;
+}
+
+/* контейнер ячеек теперь центрирован всегда */
+.cells-container {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 5px;
+    align-items: center;
+    grid-auto-columns: minmax(auto, 35px);
+}
+
+/* ячейка (гибкая ширина авто) */
 .cell {
     width: 100%;
     aspect-ratio: 1 / 1;
     background: #ddd;
     border: 1px solid #aaa;
-    max-width: 35px;  /* вот это было ключевое */
 }
 
+.cells-row.muted {
+    opacity: 0.2;          /* полупрозрачный вид */
+    pointer-events: auto;  /* меняет поведение - клики заблокированы */
+  }
+  
+  .mute-button.active {
+    background: #888;
+    color: #fff;
+  }
+  
+  .loop-button {
+    cursor: pointer;
+    border: none; 
+    margin-bottom: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #ddd;
+  }
+  
+  .loop-button.active {
+    background-color: #0077cc;
+    color: #fff;
+  }
 
-.cells-row:has(.cell:nth-child(-n+3)) .cell {
-    max-width: 35px;
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+  }
+  
+  .cell.shake {
+    animation: shake 0.4s ease-in-out;
+    background-color: rgba(255, 0, 0, 0.1); /* лёгкий красный фон */
+  }
+    
+/* подсветка текущей ячейки при воспроизведении */
+.cell.active-step {
+  background-color: #42a5f5;
+  box-shadow: 0 0 10px #42a5f5;
 }
-
-/* Адаптация под мобильные экраны (до 768px ширины экрана делаем 2 колонки) */
+/* адаптивность для мобильных экранов */
 @media screen and (max-width: 768px) {
     #sequencer {
-        max-width: calc(2 * 162px + 10px); /* Максимум 2 блока + 1 промежуток */
+        max-width: calc(2 * 192px + 10px);
     }
 
     .block {
-        width: calc(50% - 5px); /* 2 блока, поделили gap (10px) на 2 блока = 5px */
+        width: calc(50% - 5px);
     }
 }
