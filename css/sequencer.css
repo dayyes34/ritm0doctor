@@ -1,125 +1,129 @@
 body {
-    font-family: Arial, sans-serif;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  padding: 0;
+  background: linear-gradient(90deg, #660000 0%, #660000 30%, #000066 70%, #000066 100%);
+  color: #ffffff; /* общий белый текст для контраста с тёмным фоном */
 }
 
 #sequencer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin: 0 auto;
-    max-width: calc(4 * 192px + 3 * 10px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto;
+  max-width: calc(4 * 192px + 3 * 10px);
 }
 
-
-
 .block {
-    border: 1px solid #333;
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    box-sizing: border-box;
-    width: calc(25% - 7.5px);
-    max-width: 192px;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  width: calc(25% - 7.5px);
+  max-width: 192px;
+  border-radius: 8px;
+  background-color: rgba(0,0,0,0.4); /* полупрозрачный тёмный фон */
+  backdrop-filter: blur(5px); /* лёгкая размытость для эффекта стекла */
 }
 
 .cells-row {
-    position: relative; /* добавим позиционирование относительно этого контейнера */
-    display: flex;
-    justify-content: center; /* теперь содержимое всегда центрировано */
-    align-items: center;
-    height: 38px;
-    padding-left: 30px; /* резервируем место слева для кнопки */
-    box-sizing: border-box;
+  position: relative; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 38px;
+  padding-left: 30px;
+  box-sizing: border-box;
 }
 
-/* кнопка mute теперь жестко стоит слева */
 .mute-button {
-    position: absolute;
-    left: 0; /* кнопка не уедет в центр */
-    top: 50%;
-    transform: translateY(-50%); /* идеально центрируем ее по вертикали */
-    width: 24px; 
-    height: 24px;
-    background: #eee;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: #ffffff;
+  border-radius: 50%; /* круглые кнопки */
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .mute-button.active {
-    background: #888;
-    color: #fff;
+  background: #990000; /* насыщенный темно-красный при активации */
+  box-shadow: 0 0 6px #ff4444;
 }
 
-/* контейнер ячеек теперь центрирован всегда */
 .cells-container {
-    display: grid;
-    grid-auto-flow: column;
-    gap: 5px;
-    align-items: center;
-    grid-auto-columns: minmax(auto, 35px);
+  display: grid;
+  grid-auto-flow: column;
+  gap: 5px;
+  align-items: center;
+  grid-auto-columns: minmax(auto, 35px);
 }
 
-/* ячейка (гибкая ширина авто) */
 .cell {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    background: #ddd;
-    border: 1px solid #aaa;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px; /* слегка скругленные края ячеек */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cell:hover {
+  background-color: rgba(255,255,255,0.2);
 }
 
 .cells-row.muted {
-    opacity: 0.2;          /* полупрозрачный вид */
-    pointer-events: auto;  /* меняет поведение - клики заблокированы */
-  }
-  
-  .mute-button.active {
-    background: #888;
-    color: #fff;
-  }
-  
-  .loop-button {
-    cursor: pointer;
-    border: none; 
-    margin-bottom: 5px;
-    padding: 4px 8px;
-    border-radius: 4px;
-    background-color: #ddd;
-  }
-  
-  .loop-button.active {
-    background-color: #0077cc;
-    color: #fff;
-  }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-8px); }
-    40%, 80% { transform: translateX(8px); }
-  }
-  
-  .cell.shake {
-    animation: shake 0.4s ease-in-out;
-    background-color: rgba(255, 0, 0, 0.1); /* лёгкий красный фон */
-  }
-    
-/* подсветка текущей ячейки при воспроизведении */
-.cell.active-step {
-  background-color: #42a5f5;
-  box-shadow: 0 0 10px #42a5f5;
+  opacity: 0.3;
+  pointer-events: auto;
 }
-/* адаптивность для мобильных экранов */
-@media screen and (max-width: 768px) {
-    #sequencer {
-        max-width: calc(2 * 192px + 10px);
-    }
 
-    .block {
-        width: calc(50% - 5px);
-    }
+.loop-button {
+  cursor: pointer;
+  border: none; 
+  margin-bottom: 5px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #ffffff;
+  background-color: rgba(255,255,255,0.2);
+}
+
+.loop-button.active {
+  background-color: #0077cc; /* яркий синий акцент */
+  box-shadow: 0 0 6px #55aaff;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.cell.shake {
+  animation: shake 0.4s ease-in-out;
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+.cell.active-step {
+  background-color: #42a5f5; /* текущая ячейка ярко подсвечена */
+  box-shadow: 0 0 12px #42a5f5; /* лёгкое свечение */
+}
+
+/* адаптивность сохранена */
+@media screen and (max-width: 768px) {
+  #sequencer {
+      max-width: calc(2 * 192px + 10px);
+  }
+
+  .block {
+      width: calc(50% - 5px);
+  }
 }
