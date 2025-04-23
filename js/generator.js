@@ -165,18 +165,17 @@ function createBlock(blockCellsConfig, globalRowsConfig, blockIndex){
   loopBtn.classList.add('loop-button');
   loopBtn.textContent = `Loop ${blockIndex + 1}`;
   loopBtn.onclick = function(){
-    currentLoopBlockIndex = currentLoopBlockIndex === blockIndex ? null : blockIndex;
-    updateLoopView();
+    currentLoopBlockIndex = (currentLoopBlockIndex === blockIndex) ? null : blockIndex;
+    updateLoopView(); // Обновляем визуально
   };
   block.appendChild(loopBtn); // добавляем её в блок сверху
 
   const rowsContainer = document.createElement('div');
   rowsContainer.classList.add('rows-container');
 
-  // Чётко определяем значение showMuteButtons (true или false явно):
   const showMuteButtons = (blockCellsConfig.showMuteButtons !== undefined)
-                                ? blockCellsConfig.showMuteButtons
-                                : true; // по умолчанию true
+                          ? blockCellsConfig.showMuteButtons
+                          : true; // по умолчанию true
 
   globalRowsConfig.forEach(({id, enabled, limb})=>{
     if(enabled){
@@ -185,13 +184,27 @@ function createBlock(blockCellsConfig, globalRowsConfig, blockIndex){
         id, 
         blockCellsConfig[id], 
         limb, 
-        showMuteButtons // гарантировано передается true или нужное значение
+        showMuteButtons
       ));
     }
   });
 
   block.appendChild(rowsContainer);
   return block;
+}
+
+// Добавляем функцию обновления отображения loop-кнопок
+function updateLoopView(){
+  document.querySelectorAll('.block').forEach(elem => {
+    const blockIdx = parseInt(elem.dataset.blockIndex, 10);
+    if(blockIdx === currentLoopBlockIndex){
+      elem.classList.add('loop'); // Именно этот класс используется логикой плеера
+      elem.querySelector('.loop-button').classList.add('active');
+    } else {
+      elem.classList.remove('loop');
+      elem.querySelector('.loop-button').classList.remove('active');
+    }
+  });
 }
 
 

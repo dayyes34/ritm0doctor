@@ -24,17 +24,19 @@
 <!-- родительское облако секвенсора -->
 
 <div id="sequencer"></div>
-<div id="playerControls">
-    <button id="startStop">Start/Stop</button>
-  
-    <input type="range" id="tempoSlider" min="60" max="200" value="120">
-    <span id="tempoValue">120 BPM</span>
-  
-    <select id="durationSelect">
-      <option value="4">Четверти</option>
-      <option value="8">Восьмые</option>
-      <option value="16" selected>Шестнадцатые</option>
-    </select>
+<button onclick="SequencerPlayer.start()">Start</button>
+<button onclick="SequencerPlayer.stop()">Stop</button>
+
+<!-- Слайдер темпа -->
+<input type="range" id="tempoSlider" min="60" max="200" 
+       onchange="SequencerPlayer.setTempo(this.value)" value="120"> 
+
+<select onchange="SequencerPlayer.setDuration(this.value)">
+  <option value="4">Четверти</option>
+  <option value="8">Восьмые</option>
+  <option value="16" selected>Шестнадцатые</option>
+</select>
+
   </div>
   
 <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
